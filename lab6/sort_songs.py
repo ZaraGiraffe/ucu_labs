@@ -48,8 +48,8 @@ def sort_songs(song_titles, length_songs, key):
             length_songs[i] = float(v)
     if len(song_titles) != len(length_songs):
         return None
-    rs = []
+    res = []
     for i in range(len(song_titles)):
-        rs += [(song_titles[i], str(length_songs[i]))]
-    rs.sort(key=key)
-    return rs
+        res += [(song_titles[i], str(length_songs[i]))]
+    res.sort(key=key)
+    return res
