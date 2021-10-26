@@ -1,5 +1,5 @@
 from typing import List
-import itertools, random
+import random, copy
 
 def generate_grid() -> List[List[str]]:
     """
@@ -17,10 +17,11 @@ def generate_grid() -> List[List[str]]:
     return res
 
 
-def get_words(f: str, letters: List[str]) -> List[str]:
+def get_words(f: str, grid: List[str]) -> List[str]:
     """
     Reads the file f. Checks the words with rules and returns a list of words.
     """
+    letters = copy.deepcopy(grid)
     res = []
     words = []
     have = letters[4]
@@ -49,7 +50,7 @@ def get_words(f: str, letters: List[str]) -> List[str]:
                 if not i in words:
                     ch2 = False
                     break
-            if ch2:
+            if ch2 and len(res1) > 3:
                 res.append(res1)
     return res
 
@@ -68,9 +69,6 @@ def get_user_words() -> List[str]:
     return lst
 
 
-print(get_user_words())
-
-
 def get_pure_user_words(user_words: List[str], letters: List[str], words_from_dict: List[str]) -> List[str]:
     """
     (list, list, list) -> list
@@ -78,13 +76,37 @@ def get_pure_user_words(user_words: List[str], letters: List[str], words_from_di
     Checks user words with the rules and returns list of those words
     that are not in dictionary.
     """
-    ch = get_words('lab6/en', letters)
     cout = []
     for i in user_words:
-        if not i in ch:
+        check = True
+        if not letters[4] in i:
+            check = False
+        for j in i:
+            if i.count(j) > letters.count(j):
+                check = False
+        if not i in words_from_dict and check:
             cout.append(i)
     return cout
 
 
 def results():
-    pass
+    """
+    prints result of the game
+    """
+    grid1 = generate_grid()
+    grid = [grid1[i][j] for i in range(3) for j in range(3)]
+    print(grid, grid1)
+    words = get_words('./en', grid)
+    user = get_user_words()
+    pure = get_pure_user_words(user, grid, words)
+    num = 0
+    for i in user:
+        if i in words:
+            num += 1
+            words.remove(i)
+    res = words + pure
+    with open('./result.txt', 'w') as file:
+        file.write(str(num))
+        file.write('\n')
+        for i in res:
+            file.write(i+'\n')
