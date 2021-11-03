@@ -1,5 +1,11 @@
-from copy import copy, deepcopy
+def first(lst):
+    d = {}
+    while(len(lst) > 0):
+        key = lst.pop(-1)
+        item = lst.count(key)
+        d[key] = item + 1
+    
+    return sum([d[item] for item in d])
 
-s = [1, 2, 3, 4, 5, 5, 5]
-k = s.pop()
-print(s, k)
+lst = [1, 2, 3, 1, 2, 3]
+print(first(lst))
