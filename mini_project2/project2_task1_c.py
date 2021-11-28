@@ -2,12 +2,21 @@ from argparse import ArgumentParser as Arg
 import os
 
 def code(char, off):
+    b = char == char.lower()
+    a = 'a'
+    z = 'z'
+    if ord(char) >= ord('а') and ord(char) <= ord('я'):
+        a = 'а'
+        z = 'я'
     if off < 0:
-        off += ord('z') - ord('a') + 1
+        off += ord(z) - ord(a) + 1
     neword = ord(char) + off
-    if neword > ord('z'):
-        neword = ord('a') + neword - ord('z') - 1
-    return chr(neword)
+    if neword > ord(z):
+        neword = ord(a) + neword - ord(z) - 1
+    if b:
+        return chr(neword)
+    else:
+        return chr(neword).upper()
 
 
 par = Arg(description='Ceasers code')
@@ -30,9 +39,8 @@ if __name__ == '__main__':
             for i in line:
                 lst.append(i)
             for i, ch in enumerate(lst):
-                if not ch.isalpha():
-                    continue
-                lst[i] = code(ch, off)
+                if ch.isalpha():
+                    lst[i] = code(ch, off)
             newfile.append(''.join(lst))
     if obj.inplace == None:
         for i in newfile:

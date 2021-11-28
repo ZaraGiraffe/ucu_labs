@@ -1,0 +1,3 @@
+name,department,birthday month
+Arman,APSS,September
+Armana,BAITT,May
